@@ -60,20 +60,20 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     // Android
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    implementation("androidx.preference:preference:1.2.0")
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.preference)
 
     // osmdroid for map
-    implementation("org.osmdroid:osmdroid-android:6.1.18")
+    implementation(libs.osmdroid.android)
 
     // GPX parsing
-    implementation("io.jenetics:jpx:3.2.0")
+    implementation(libs.jpx)
 
     // Runtime permissions
-    implementation("androidx.activity:activity-ktx:1.8.2")
+    implementation(libs.androidx.activity.ktx)
 
     // Async task Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.kotlinx.coroutines.android)
 }
