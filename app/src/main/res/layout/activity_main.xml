@@ -18,7 +18,7 @@
         android:id="@+id/btnLoadGpx"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Charger trace GPX"
+        android:text="@string/load_gpx"
         android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Randoditor</string>
+    <string name="load_gpx">Load GPX</string>
 </resources>
