@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Init routing service
-        routingService = IgnRoutingService.create("toto")
+        routingService = IgnRoutingService.create()
 
         checkPermissionsAndSetup()
         setupButtons()

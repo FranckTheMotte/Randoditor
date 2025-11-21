@@ -32,9 +32,9 @@ interface IgnRoutingService {
     companion object {
         private const val BASE_URL = "https://data.geopf.fr/navigation/"
 
-        fun create(apiKey: String): IgnRoutingService {
+        fun create(): IgnRoutingService {
             val retrofit = Retrofit.Builder()
-                .baseUrl(BASE_URL.replace("calcul", apiKey))
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
