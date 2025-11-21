@@ -30,7 +30,7 @@
             android:id="@+id/tvMode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mode: Affichage"
+            android:text="@string/display_mode"
             android:textStyle="bold"
             android:layout_marginBottom="8dp" />
 
@@ -45,7 +45,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tracé libre"
+                android:text="@string/free_route"
                 android:layout_margin="4dp"
                 style="@style/Widget.Material3.Button.TonalButton" />
 
@@ -54,7 +54,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tracé guidé"
+                android:text="@string/trac_guid"
                 android:layout_margin="4dp"
                 style="@style/Widget.Material3.Button.TonalButton" />
 
@@ -63,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Charger GPX"
+                android:text="@string/gpx_load"
                 android:layout_margin="4dp"
                 style="@style/Widget.Material3.Button.TonalButton" />
         </LinearLayout>
@@ -79,7 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Annuler"
+                android:text="@string/cancel"
                 android:layout_margin="4dp"
                 android:enabled="false" />
 
@@ -88,7 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Effacer"
+                android:text="@string/Clear"
                 android:layout_margin="4dp"
                 android:enabled="false" />
 
@@ -97,7 +97,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sauvegarder"
+                android:text="@string/save"
                 android:layout_margin="4dp"
                 android:enabled="false" />
         </LinearLayout>
@@ -106,7 +106,7 @@
             android:id="@+id/tvInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Distance: 0 km"
+            android:text="@string/info"
             android:layout_marginTop="4dp"
             android:textSize="12sp" />
     </LinearLayout>

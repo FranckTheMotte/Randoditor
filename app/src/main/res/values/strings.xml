@@ -1,4 +1,12 @@
 <resources>
     <string name="app_name">Randoditor</string>
     <string name="load_gpx">Load GPX</string>
+    <string name="trac_guid">Guided route</string>
+    <string name="gpx_load">Load Gpx</string>
+    <string name="free_route">Free route</string>
+    <string name="display_mode">Mode: Display</string>
+    <string name="cancel">Cancel</string>
+    <string name="Clear">Clear</string>
+    <string name="save">Save</string>
+    <string name="info">Distance: 0 km</string>
 </resources>
