@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.grumblepotato.randoditor"
-        minSdk = 27
+        minSdk = 35
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -76,4 +76,12 @@ dependencies {
 
     // Async task Coroutines
     implementation(libs.kotlinx.coroutines.android)
+
+    // routing
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    // JSON parsing
+    implementation("com.google.code.gson:gson:2.10.1")
 }
