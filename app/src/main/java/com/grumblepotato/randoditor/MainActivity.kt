@@ -39,8 +39,15 @@ class MainActivity : AppCompatActivity() {
         GUIDED_ROUTING
     }
 
+    // Class to keep added segments
+    private data class RouteSegment(
+        val points: List<GeoPoint>,
+        val marker: Marker
+    )
+
     private var currentMode = RouteMode.VIEW
     private val routePoints = mutableListOf<GeoPoint>()
+    private val routeSegments = mutableListOf<RouteSegment>()
     private var currentPolyline: Polyline? = null
     private val markers = mutableListOf<Marker>()
 
@@ -172,13 +179,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun toggleMode(newMode: RouteMode) {
         if (currentMode == newMode) {
-            // Désactiver le mode
+            // Disable mode
             currentMode = RouteMode.VIEW
             binding.tvMode.text = "Mode: Affichage"
             binding.btnFreeRoute.isEnabled = true
             binding.btnGuidedRoute.isEnabled = true
         } else {
-            // Activer le nouveau mode
+            // Activate the new mode
             clearRoute()
             currentMode = newMode
             when (newMode) {
@@ -199,8 +206,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addFreePoint(point: GeoPoint) {
+        val marker = addMarker(point, markers.size + 1)
+
+        // For the first point, a segment with a single point is created otherwise a line
+        val segmentPoints = if (routePoints.isEmpty()) {
+            listOf(point)
+        } else {
+            listOf(routePoints.last(), point)
+        }
+
         routePoints.add(point)
-        addMarker(point, routePoints.size)
+        routeSegments.add(RouteSegment(segmentPoints, marker))
+
         updatePolyline()
         updateButtonStates()
         updateInfo()
@@ -208,12 +225,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun addGuidedPoint(point: GeoPoint) {
         if (routePoints.isEmpty()) {
-            // Premier point
+            // First point
+            val marker = addMarker(point, 1)
             routePoints.add(point)
-            addMarker(point, 1)
+            routeSegments.add(RouteSegment(listOf(point), marker))
             updateButtonStates()
         } else {
-            // Calculer le routing depuis le dernier point
+            // Calculate routing from last point
             val lastPoint = routePoints.last()
             calculateRoute(lastPoint, point)
         }
@@ -236,14 +254,19 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 response.geometry?.coordinates?.let { coords ->
-                    // Convertir les coordonnées (format: [lon, lat])
+                    // Geographical coords convert
                     val newPoints = coords.map { coord ->
                         GeoPoint(coord[1], coord[0])
                     }
 
-                    // Ajouter les nouveaux points (sauf le premier qui existe déjà)
-                    routePoints.addAll(newPoints.drop(1))
-                    addMarker(end, routePoints.size)
+                    // Marker for the end point
+                    val marker = addMarker(end, markers.size + 1)
+
+                    // Add a new points
+                    val segmentPoints = newPoints.drop(1)
+                    routePoints.addAll(segmentPoints)
+                    routeSegments.add(RouteSegment(newPoints, marker))
+
                     updatePolyline()
                     updateInfo()
                     updateButtonStates()
@@ -252,7 +275,7 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 Toast.makeText(
                     this@MainActivity,
-                    "Erreur routing: ${e.message}",
+                    "Routing error: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
                 e.printStackTrace()
@@ -262,7 +285,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addMarker(point: GeoPoint, number: Int) {
+    private fun addMarker(point: GeoPoint, number: Int): Marker {
         val marker = Marker(binding.mapView).apply {
             position = point
             title = "Point $number"
@@ -271,13 +294,14 @@ class MainActivity : AppCompatActivity() {
         markers.add(marker)
         binding.mapView.overlays.add(marker)
         binding.mapView.invalidate()
+        return marker
     }
 
     private fun updatePolyline() {
-        // Supprimer l'ancienne ligne
+        // Remove last line
         currentPolyline?.let { binding.mapView.overlays.remove(it) }
 
-        // Créer la nouvelle ligne
+        // Create the new line
         if (routePoints.size >= 2) {
             currentPolyline = Polyline(binding.mapView).apply {
                 setPoints(routePoints)
@@ -291,22 +315,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun undoLastPoint() {
-        if (routePoints.isNotEmpty()) {
-            routePoints.removeLast()
+        if (routeSegments.isEmpty()) return
 
-            if (markers.isNotEmpty()) {
-                val lastMarker = markers.removeLast()
-                binding.mapView.overlays.remove(lastMarker)
-            }
+        // Retrieve the last segment
+        val lastSegment = routeSegments.removeLast()
 
-            updatePolyline()
-            updateInfo()
-            updateButtonStates()
+        // Delete the linked marker
+        binding.mapView.overlays.remove(lastSegment.marker)
+        markers.remove(lastSegment.marker)
+
+        // Remove segment's points
+        // Free route: remove 1 point
+        // Guided route: remove all points between 2 last marker
+        val pointsToRemove = if (currentMode == RouteMode.FREE_DRAWING) {
+            1
+        } else {
+            lastSegment.points.size - 1 // -1 because the first point belong to previous segment
         }
+
+        repeat(pointsToRemove) {
+            if (routePoints.isNotEmpty()) {
+                routePoints.removeLast()
+            }
+        }
+
+        updatePolyline()
+        updateInfo()
+        updateButtonStates()
     }
 
     private fun clearRoute() {
         routePoints.clear()
+        routeSegments.clear()
 
         currentPolyline?.let { binding.mapView.overlays.remove(it) }
         currentPolyline = null
@@ -343,10 +383,9 @@ class MainActivity : AppCompatActivity() {
         }
         return totalDistance
     }
-
     private fun saveRouteAsGpx() {
         // TODO: Implémenter la sauvegarde GPX
-        Toast.makeText(this, "Sauvegarde GPX à implémenter", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "TODO implement", Toast.LENGTH_SHORT).show()
     }
 
     override fun onResume() {
