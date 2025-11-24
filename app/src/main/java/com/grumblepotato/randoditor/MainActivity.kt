@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
         if (currentMode == newMode) {
             // Disable mode
             currentMode = RouteMode.VIEW
-            binding.tvMode.text = "Mode: Affichage"
+            binding.tvMode.text = "Mode: Display"
             binding.btnFreeRoute.isEnabled = true
             binding.btnGuidedRoute.isEnabled = true
         } else {
@@ -190,12 +190,12 @@ class MainActivity : AppCompatActivity() {
             currentMode = newMode
             when (newMode) {
                 RouteMode.FREE_DRAWING -> {
-                    binding.tvMode.text = "Mode: Tracé libre (cliquez sur la carte)"
+                    binding.tvMode.text = "Mode: Free drawing (click on map)"
                     binding.btnFreeRoute.isEnabled = false
                     binding.btnGuidedRoute.isEnabled = true
                 }
                 RouteMode.GUIDED_ROUTING -> {
-                    binding.tvMode.text = "Mode: Tracé guidé (cliquez pour ajouter des points)"
+                    binding.tvMode.text = "Mode: Guided drawing (add points on route)"
                     binding.btnFreeRoute.isEnabled = true
                     binding.btnGuidedRoute.isEnabled = false
                 }
